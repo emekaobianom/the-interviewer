@@ -1,35 +1,27 @@
 import React, { useState } from "react";
-import parse from "html-react-parser";
-import { InterviewIcon, UserIcon } from "./helper";
+import Welcome from "./Pages/Welcome";
+import Instruction from "./Pages/Instruction";
+import Question from "./Pages/Question";
+import Result from "./Pages/Result";
 
 const App = () => {
-  //chats
-  let chatStore = [
-    `${InterviewIcon} Hi, Good Afternoon. <br/>`,
-    `${InterviewIcon} My name is Mike. <br/>`,
-    `${InterviewIcon} What's yours - <br/>`,
-    `${UserIcon} <input type="text" placeholder="your name" />`,
-  ];
+  const [page, setPage] = useState("welcome");
+  const [data, setData] = useState({});
 
-  const [chat, setChat] = useState(chatStore[0]);
-  const [chatCounter, setChatCounter] = useState(1);
-
-  //chat automatically
-  const timer = setTimeout(() => {
-    setChat(chat + chatStore[chatCounter]);
-    setChatCounter(chatCounter + 1);
-  }, 1000);
-
-  //when
-  if (chatCounter == chatStore.length) {
-    clearTimeout(timer);
+  function handleOnChangePage(newPage,newData) {
+    setData(newData);
+    setPage(newPage);
   }
 
   return (
     <>
       <h1>The Interviewer</h1>
       <hr />
-      <p>{parse(chat)}</p>
+      {/* page */}
+      {page == "welcome" && <Welcome onChangePage={handleOnChangePage} />}
+      {page == "instruction" && <Instruction data={data} onChangePage={handleOnChangePage} />}
+      {page == "question" && <Question data={data} onChangePage={handleOnChangePage} key={data.quizNo} />}
+      {page == "result" && <Result onChangePage={handleOnChangePage} />}
       <hr />
     </>
   );
