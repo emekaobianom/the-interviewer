@@ -40,7 +40,6 @@ const Result = ({ onChangePage, result }) => {
       {parse(chat)}
       {endOfStoreChat && (
         <>
-          {result}
           {Icon.user} <button onClick={onRestartHandle}>Restart</button>{" "}
         </>
       )}
