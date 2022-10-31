@@ -9,24 +9,15 @@ const App = () => {
   const [data, setData] = useState({});
   const [result, setResult] = useState([]);
 
-  function handleOnChangePage(newPage, newData) {
-    if (newPage == "question" && newData.mark != undefined) {
-      //update score
-      let index = newData.currentQuizNo - 1;
-      keepMark(index, newData.mark);
-    } else {
-      //move to next page
-      if (newPage == "question") {
-        keepMark(newData.quizNo);
-      }
+  function handleOnChangePage(newPage, newData) {    
       setData(newData);
       setPage(newPage);
-    }
   }
 
-  function keepMark(index = 0, mark = "wrong") {
+  function handleOnUpdateAnswer(newData) {   
+      //update score
     let resultCopy = result;
-    resultCopy[index] = mark;
+    resultCopy[newData.index] = newData.mark;
     setResult(resultCopy);
   }
 
@@ -42,6 +33,7 @@ const App = () => {
       {page == "question" && (
         <Question
           data={data}
+          onUpdateAnswer={handleOnUpdateAnswer}
           onChangePage={handleOnChangePage}
           key={data.quizNo}
         />

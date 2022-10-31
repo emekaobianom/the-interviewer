@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import javascriptQuestions, { options } from "../Data/javascriptQuestions";
 
-const Question = ({ onChangePage, data }) => {
+const Question = ({ onChangePage,onUpdateAnswer, data }) => {
   //------ hooks -----
   //states
   const quiz = javascriptQuestions[data.quizNo];
-  let [timer, setTimer] = useState(15);
+  const [timer, setTimer] = useState(30);
+  const [answer, setAnswer] = useState("");
 
   const timeCountDown = setTimeout(() => {
     if (timer == 0) {
@@ -16,21 +17,19 @@ const Question = ({ onChangePage, data }) => {
   }, 1000);
 
   //------- handlers -----
-  function handleChange(event) {
-    //mark answer
-    //  alert(event.target.value);
-    // alert(currentDate.getTime())
-    onChangePage("question", {
-      currentQuizNo: data.quizNo,
-      mark: markAnswer(event.target.value),
-    });
+  function handleAnswerChange(event) {
+    setAnswer(event.target.value);
   }
+
   function onSubmitHandle(event) {
     event.preventDefault();
     nextQuiz_Or_Result();
   }
 
   function nextQuiz_Or_Result() {
+    //update answer
+    UpdateAnswer();
+
     //RESULT
     if (javascriptQuestions.length < quiz.no + 1) {
       onChangePage("result", { name: "result" });
@@ -40,6 +39,14 @@ const Question = ({ onChangePage, data }) => {
       //since array index starts from 0
       onChangePage("question", { quizNo: quiz.no });
     }
+  }
+
+  //---- helpers
+  function UpdateAnswer(){
+    onUpdateAnswer( {
+      index: (quiz.no-1),
+      mark: markAnswer(answer),
+    });
   }
 
   function markAnswer(myanswer) {
@@ -65,7 +72,7 @@ const Question = ({ onChangePage, data }) => {
               type="radio"
               name="option"
               value={key}
-              onChange={handleChange}
+              onChange={handleAnswerChange}
             />
             <label htmlFor="option">
               {key}. {quiz.option[key]}
