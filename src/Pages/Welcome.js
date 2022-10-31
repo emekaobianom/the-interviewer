@@ -1,26 +1,21 @@
-
 import parse from "html-react-parser";
 import React, { useState } from "react";
-import { InterviewIcon, UserIcon } from "../helper";
+import { Icon } from "../helper";
 
-
-const Welcome = ({onChangePage}) => {
-
-     //chats
+const Welcome = ({ onChangePage }) => {
+  //chats
   let chatStore = [
-    `${InterviewIcon} Hi, Good Afternoon. <br/>`,
-    `${InterviewIcon} My name is Mike. <br/>`,
-    `${InterviewIcon} What's yours - <br/>`,
+    `${Icon.interviewer} Hi, Good Afternoon. <br/>`,
+    `${Icon.interviewer} My name is Mike. <br/>`,
+    `${Icon.interviewer} What's yours - <br/>`,
   ];
 
-  //------- handlers -----  
+  //------- handlers -----
   function onEnterKeyHandle(event) {
-    if(event.key === 'Enter'){
-    
-      onChangePage('instruction',{name:event.target.value})
-    
-    } 
-  } 
+    if (event.key === "Enter") {
+      onChangePage("instruction", { name: event.target.value });
+    }
+  }
 
   //-------- engine ------
   const [chat, setChat] = useState(chatStore[0]);
@@ -33,17 +28,26 @@ const Welcome = ({onChangePage}) => {
   }, 1000);
 
   //stop using store
-  let endOfStoreChat = (chatCount == chatStore.length);
+  let endOfStoreChat = chatCount == chatStore.length;
   if (endOfStoreChat) {
     clearTimeout(timer);
   }
 
-    return (
-        <div>
-        {parse(chat)}
-        {endOfStoreChat && <>{UserIcon} <input type="text" onKeyPress={onEnterKeyHandle} placeholder="your name" /> </> }
-      </div>
-    );
-}
+  return (
+    <div>
+      {parse(chat)}
+      {endOfStoreChat && (
+        <>
+          {Icon.user}
+          <input
+            type="text"
+            onKeyPress={onEnterKeyHandle}
+            placeholder="your name"
+          />{" "}
+        </>
+      )}
+    </div>
+  );
+};
 
 export default Welcome;

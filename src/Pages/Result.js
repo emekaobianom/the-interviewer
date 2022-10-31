@@ -1,17 +1,21 @@
 import parse from "html-react-parser";
 import React, { useState } from "react";
-import { InterviewIcon, UserIcon } from "../helper";
+import { Icon } from "../helper";
 
-const Result = ({ onChangePage }) => {
+const Result = ({ onChangePage, result }) => {
   //chats
   let chatStore = [
-    `${InterviewIcon} Your Result for this Quiz is. <br/>`,
-    `<h1>3/10<h1/>`,
+    `${Icon.interviewer} Your Result for this Quiz is. <br/>`,
+    `<h1>${getScore()}<h1/>`,
   ];
 
   //------- handlers -----
   function onRestartHandle(event) {
     onChangePage("welcome", {});
+  }
+
+  function getScore() {
+    return `${result.filter((r) => r == "correct").length}/${result.length}`;
   }
 
   //-------- engine ------
@@ -36,7 +40,8 @@ const Result = ({ onChangePage }) => {
       {parse(chat)}
       {endOfStoreChat && (
         <>
-          {UserIcon} <button onClick={onRestartHandle}>Restart</button>{" "}
+          {result}
+          {Icon.user} <button onClick={onRestartHandle}>Restart</button>{" "}
         </>
       )}
     </div>

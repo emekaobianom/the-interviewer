@@ -1,4 +1,4 @@
-let InterviewIcon = "☺";
-let UserIcon = "☛";
-
-export { InterviewIcon, UserIcon };
+export const Icon = {
+  interviewer: "☺",
+  user: "☛",
+};

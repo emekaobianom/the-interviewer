@@ -17,8 +17,13 @@ const Question = ({ onChangePage, data }) => {
 
   //------- handlers -----
   function handleChange(event) {
+    //mark answer
     //  alert(event.target.value);
     // alert(currentDate.getTime())
+    onChangePage("question", {
+      currentQuizNo: data.quizNo,
+      mark: markAnswer(event.target.value),
+    });
   }
   function onSubmitHandle(event) {
     event.preventDefault();
@@ -34,6 +39,14 @@ const Question = ({ onChangePage, data }) => {
       //the current quiz.no is the index of the next quiz
       //since array index starts from 0
       onChangePage("question", { quizNo: quiz.no });
+    }
+  }
+
+  function markAnswer(myanswer) {
+    if (myanswer == quiz.answer) {
+      return "correct";
+    } else {
+      return "wrong";
     }
   }
 
