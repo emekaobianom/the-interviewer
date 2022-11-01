@@ -1,3 +1,5 @@
+https://dev.to/ivadyhabimana/how-to-create-a-react-app-without-using-create-react-app-a-step-by-step-guide-30nl
+
 `npm init`
 
 `npm i --save-dev webpack webpack-cli webpack-dev-server babel-loader @babel/preset-env @babel/core @babel/plugin-transform-runtime @babel/preset-react @babel/eslint-parser @babel/runtime @babel/cli eslint eslint-config-airbnb-base eslint-plugin-jest eslint-config-prettier path`
@@ -56,3 +58,8 @@ const App = () => {
 
 export default App;
 -->
+<!-- ====================================ADD UNIT TESTING============================================== -->
+https://dev.to/ivadyhabimana/setup-jest-and-react-testing-library-in-a-react-project-a-step-by-step-guide-1mf0
+
+`npm install --save-dev @testing-library/react @testing-library/jest-dom`
+
