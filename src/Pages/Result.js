@@ -10,7 +10,7 @@ const Result = ({ onChangePage, result }) => {
   ];
 
   //------- handlers -----
-  function onRestartHandle(event) {
+  function handleRestart(event) {
     onChangePage("welcome", {});
   }
 
@@ -21,16 +21,17 @@ const Result = ({ onChangePage, result }) => {
   //-------- engine ------
   const [chat, setChat] = useState(chatStore[0]);
   const [chatCount, setChatCount] = useState(1);
+  const ONE_SECOND = 1000;
+  const currentChatIsLastInStore = chatCount == chatStore.length;
 
   //chat automatically
   const timer = setTimeout(() => {
     setChat(chat + chatStore[chatCount]);
     setChatCount(chatCount + 1);
-  }, 1000);
+  }, ONE_SECOND);
 
   //stop using store
-  let endOfStoreChat = chatCount == chatStore.length;
-  if (endOfStoreChat) {
+  if (currentChatIsLastInStore) {
     clearTimeout(timer);
   }
 
@@ -38,9 +39,9 @@ const Result = ({ onChangePage, result }) => {
     <div>
       <h3>Result</h3>
       {parse(chat)}
-      {endOfStoreChat && (
+      {currentChatIsLastInStore && (
         <>
-          {Icon.user} <button onClick={onRestartHandle}>Restart</button>{" "}
+          {Icon.user} <button onClick={handleRestart}>Restart</button>{" "}
         </>
       )}
     </div>

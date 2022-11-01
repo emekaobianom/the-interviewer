@@ -2,79 +2,86 @@ import React, { useState } from "react";
 import javascriptQuestions, { options } from "../Data/javascriptQuestions";
 import { Icon } from "../helper";
 
-const Question = ({ onChangePage,onUpdateAnswer, data }) => {
-  //------ hooks -----
-  //states
-  const quiz = javascriptQuestions[data.quizNo];
+const Question = ({
+  onChangePage,
+  onGoToNextQuiz,
+  onUpdateAnswerChoice,
+  data,
+}) => {
+  const quiz = javascriptQuestions[data.quizIndex];
+  const QUIZ_INDEX = quiz.no - 1;
+  const NEXT_QUIZ_NO = QUIZ_INDEX + 1;
+  const moreQuestionsExists = javascriptQuestions.length > NEXT_QUIZ_NO;
+  const ONE_SECOND = 1000;
+
   const [timer, setTimer] = useState(30);
   const [answer, setAnswer] = useState("");
 
-  const timeCountDown = setTimeout(() => {
+  //start time countdown immediately
+  setTimeout(() => {
     if (timer == 0) {
-      nextQuiz_Or_Result();
+      nextQuizOrResult();
     } else {
       setTimer(timer - 1);
     }
-  }, 1000);
+  }, ONE_SECOND);
 
-  //------- handlers -----
-  function handleAnswerChange(event) {
+  function handleAnswerChoice(event) {
     setAnswer(event.target.value);
   }
 
-  function onSubmitHandle(event) {
+  function handleNextButton(event) {
     event.preventDefault();
-    nextQuiz_Or_Result();
+    nextQuizOrResult();
   }
 
-  function nextQuiz_Or_Result() {
+  function nextQuizOrResult() {
     //update answer
-    UpdateAnswer();
+    UpdateMyAnswerChoice();
 
-    //RESULT
-    if (javascriptQuestions.length < quiz.no + 1) {
-      onChangePage("result", { name: "result" });
+    if (moreQuestionsExists) {
+      //go to NEXT QUIZ
+      onGoToNextQuiz({ quizIndex: NEXT_QUIZ_NO });
     } else {
-      //NEXT QUIZ
-      //the current quiz.no is the index of the next quiz
-      //since array index starts from 0
-      onChangePage("question", { quizNo: quiz.no });
+      //go to RESULT page
+      onChangePage("result");
     }
   }
 
   //---- helpers
-  function UpdateAnswer(){
-    onUpdateAnswer( {
-      index: (quiz.no-1),
-      mark: markAnswer(answer),
+  function UpdateMyAnswerChoice() {
+    onUpdateAnswerChoice({
+      index: QUIZ_INDEX,
+      mark: Mark(answer),
     });
   }
 
-  function markAnswer(myanswer) {
-    if (myanswer == quiz.answer) {
+  function Mark(myAnswer) {
+    if (myAnswer == quiz.answer) {
       return "correct";
     } else {
       return "wrong";
     }
   }
 
-  //-------- engine ------
+  //-------- render ------
 
   return (
     <div>
       <h3>
-        Question - No.{quiz.no} !! {Icon.clock}{timer}
+        Question - No.{quiz.no} !! {Icon.clock}
+        {timer}
       </h3>
       <h5>{quiz.question}</h5>
       <p>{quiz.details}</p>
-      <form onSubmit={onSubmitHandle}>
+      <form onSubmit={handleNextButton}>
         {options.map((key) => (
           <div key={key}>
             <input
               type="radio"
               name="option"
               value={key}
-              onChange={handleAnswerChange}
+              onChange={handleAnswerChoice}
             />
             <label htmlFor="option">
               {key}. {quiz.option[key]}

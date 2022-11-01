@@ -2,7 +2,7 @@ import parse from "html-react-parser";
 import React, { useState } from "react";
 import { Icon } from "../helper";
 
-const Instruction = ({ onChangePage, data }) => {
+const Instruction = ({ onGoToNextQuiz, data }) => {
   //chats
   let chatStore = [
     `${Icon.interviewer} Hi, ${data.name}. <br/>`,
@@ -12,22 +12,23 @@ const Instruction = ({ onChangePage, data }) => {
 
   //------- handlers -----
   function onStartClickHandle(event) {
-    onChangePage("question", { quizNo: 0 });
+    onGoToNextQuiz({ quizIndex: 0 });
   }
 
   //-------- engine ------
   const [chat, setChat] = useState(chatStore[0]);
   const [chatCount, setChatCount] = useState(1);
+  const ONE_SECOND = 1000;
+  const currentChatIsLastInStore = chatCount == chatStore.length;
 
   //chat automatically
   const timer = setTimeout(() => {
     setChat(chat + chatStore[chatCount]);
     setChatCount(chatCount + 1);
-  }, 1000);
+  }, ONE_SECOND);
 
   //stop using store
-  let endOfStoreChat = chatCount == chatStore.length;
-  if (endOfStoreChat) {
+  if (currentChatIsLastInStore) {
     clearTimeout(timer);
   }
 
@@ -35,7 +36,7 @@ const Instruction = ({ onChangePage, data }) => {
     <div>
       <h3>Instruction</h3>
       {parse(chat)}
-      {endOfStoreChat && (
+      {currentChatIsLastInStore && (
         <>
           {Icon.user} <button onClick={onStartClickHandle}>Start</button>{" "}
         </>

@@ -20,23 +20,24 @@ const Welcome = ({ onChangePage }) => {
   //-------- engine ------
   const [chat, setChat] = useState(chatStore[0]);
   const [chatCount, setChatCount] = useState(1);
+  const ONE_SECOND = 1000;
+  const currentChatIsLastInStore = chatCount == chatStore.length;
 
   //chat automatically
   const timer = setTimeout(() => {
     setChat(chat + chatStore[chatCount]);
     setChatCount(chatCount + 1);
-  }, 1000);
+  }, ONE_SECOND);
 
   //stop using store
-  let endOfStoreChat = chatCount == chatStore.length;
-  if (endOfStoreChat) {
+  if (currentChatIsLastInStore) {
     clearTimeout(timer);
   }
 
   return (
     <div>
       {parse(chat)}
-      {endOfStoreChat && (
+      {currentChatIsLastInStore && (
         <>
           {Icon.user}
           <input

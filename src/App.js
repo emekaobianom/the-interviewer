@@ -9,13 +9,18 @@ const App = () => {
   const [data, setData] = useState({});
   const [result, setResult] = useState([]);
 
-  function handleOnChangePage(newPage, newData) {    
-      setData(newData);
-      setPage(newPage);
+  function handleChangePage(newPage, newData) {
+    setData(newData);
+    setPage(newPage);
   }
 
-  function handleOnUpdateAnswer(newData) {   
-      //update score
+  function handleGoToNextQuiz(newData) {
+    setData(newData);
+    setPage("question");
+  }
+
+  function handleUpdateAnswer(newData) {
+    //update score
     let resultCopy = result;
     resultCopy[newData.index] = newData.mark;
     setResult(resultCopy);
@@ -26,20 +31,21 @@ const App = () => {
       <h1>The Interviewer</h1>
       <hr />
       {/* page */}
-      {page == "welcome" && <Welcome onChangePage={handleOnChangePage} />}
+      {page == "welcome" && <Welcome onChangePage={handleChangePage} />}
       {page == "instruction" && (
-        <Instruction data={data} onChangePage={handleOnChangePage} />
+        <Instruction data={data} onGoToNextQuiz={handleGoToNextQuiz} />
       )}
       {page == "question" && (
         <Question
           data={data}
-          onUpdateAnswer={handleOnUpdateAnswer}
-          onChangePage={handleOnChangePage}
-          key={data.quizNo}
+          onUpdateAnswerChoice={handleUpdateAnswer}
+          onGoToNextQuiz={handleGoToNextQuiz}
+          onChangePage={handleChangePage}
+          key={data.quizIndex}
         />
       )}
       {page == "result" && (
-        <Result result={result} onChangePage={handleOnChangePage} />
+        <Result result={result} onChangePage={handleChangePage} />
       )}
       <hr />
     </>
